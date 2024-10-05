@@ -271,7 +271,9 @@
 
             // Redirecionar para a página de download no Netlify
             const netlifyURL = `https://baixar-csv.netlify.app/download?data=${encodedCSV}`;
-            window.location.href = netlifyURL;
+
+            // Abrir a URL em uma nova aba
+            window.open(netlifyURL, '_blank');
         }
 
         // Evento para gerar e redirecionar o download
