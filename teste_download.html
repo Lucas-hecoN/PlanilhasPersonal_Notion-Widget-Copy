@@ -110,7 +110,8 @@
         <button id="downloadCSV">Baixar CSV</button>
     </div>
     <footer>
-        <p>Este é um conteúdo protegido por direitos autorais &#xa9 Planilhas Personal Trainer- @PlanilhaspersonalTrainer</p>
+        <p>Este é um conteúdo protegido por direitos autorais &#xa9 Planilhas Personal Trainer-
+            @PlanilhaspersonalTrainer</p>
     </footer>
 
     <!-- Carregando o Chart.js -->
@@ -251,32 +252,31 @@
         });
 
         // Função para gerar e baixar o arquivo CSV
-        function generateCSV() {
+        // Função para redirecionar ao Netlify para baixar o CSV
+        function generateCSVAndRedirect() {
             if (exerciseData.length === 0 || weightsData.length === 0) {
                 alert("Sem dados para baixar.");
                 return;
             }
 
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Exercício,Carga (kg),Data\n";
-
+            // Gerar o CSV
+            let csvContent = "Exercício,Carga (kg),Data\n";
             exerciseData.forEach((exercise, index) => {
                 const row = `${exercise},${weightsData[index]},${labelsData[index].split(' - ')[1]}`;
                 csvContent += row + "\n";
             });
 
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "cargas_treino.csv");
-            document.body.appendChild(link);
+            // Serializar os dados CSV para a URL
+            const encodedCSV = encodeURIComponent(csvContent);
 
-            link.click();
-            document.body.removeChild(link);
+            // Redirecionar para a página de download no Netlify
+            const netlifyURL = `https://seu-netlify-site.netlify.app/download?data=${encodedCSV}`;
+            window.location.href = netlifyURL;
         }
 
-        // Evento para baixar o CSV
-        downloadCSVButton.addEventListener('click', generateCSV);
+        // Evento para gerar e redirecionar o download
+        downloadCSVButton.addEventListener('click', generateCSVAndRedirect);
+
 
         // Carregar dados do localStorage ao iniciar a página
         window.onload = loadFromLocalStorage;
